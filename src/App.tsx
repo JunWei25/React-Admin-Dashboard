@@ -16,10 +16,11 @@ import {authProvider, dataProvider, liveProvider} from './providers';
 import { Home, ForgotPassword, Login, Register } from "./pages";
 
 import routerBindings, {
+  CatchAllNavigate,
   DocumentTitleHandler,
   UnsavedChangesNotifier,
 } from "@refinedev/react-router-v6";
-import { App as AntdApp } from "antd";
+import { App as AntdApp, Layout } from "antd";
 import { BrowserRouter, Outlet, Route, Routes } from "react-router-dom";
 
 
@@ -46,10 +47,21 @@ function App() {
             >
               <Routes>
                 <Route index element={<WelcomePage />} />
-                <Route index element={<Home />} />
                 <Route path="/register" element={<Register />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/forgot-password" element={<ForgotPassword />} />
+                <Route 
+                  element={
+                    <Authenticated key="authenticated-layout" fallback={<CatchAllNavigate to="/login"/>}>
+                  
+                  
+                    <Layout>
+                      <Outlet/>
+                    </Layout>
+                    </Authenticated>
+                  }>
+                  <Route index element={<Home />} />
+                </Route>
               </Routes>
               <RefineKbar />
               <UnsavedChangesNotifier />
